@@ -1,0 +1,423 @@
+/*
+	Theme Name: ** MARIO **
+	Theme URI: https://wordpress.org/themes/mario/
+	Author: Marek Suchanski
+	Author URI: http://okostudio: .com;
+	Description: A Staff directory.
+	Version: 0.1
+	License: GNU General Public License v2 or later
+	License URI: http://www.gnu.org/licenses/gpl-2.0.html
+	Text Domain: mario
+	Tags: one-column, cheese
+
+	This theme, like WordPress, is licensed under the GPL.
+	Use it to make something cool, have fun, and share what you've learned with others.
+*/
+
+/*
+font-family: 'Source Sans Pro', sans-serif;
+font-family: 'Domine', serif;
+*/
+
+/* http://meyerweb.com/eric/tools/css/reset/  v2.0 | 20110126 License: none (public domain) */
+a,abbr,acronym,address,applet,article,aside,audio,b,big,blockquote,body,canvas,caption,center,cite,code,dd,del,details,dfn,div,dl,dt,em,embed,fieldset,figcaption,figure,footer,form,h1,h2,h3,h4,h5,h6,header,hgroup,html,i,iframe,img,ins,kbd,label,legend,li,mark,menu,nav,object,ol,output,p,pre,q,ruby,s,samp,section,small,span,strike,strong,sub,summary,sup,table,tbody,td,tfoot,th,thead,time,tr,tt,u,ul,var,video{margin:0;padding:0;border:0;font:inherit;vertical-align:baseline}article,aside,details,figcaption,figure,footer,header,hgroup,menu,nav,section{display:block}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:after,blockquote:before,q:after,q:before{content:'';content:none}table{border-collapse:collapse;border-spacing:0}
+:focus { outline:none; } ::-moz-focus-inner { border:0; }
+
+
+*{
+	box-sizing: border-box;
+}
+
+html {
+	line-height: 1.15;
+	-ms-text-size-adjust: 100%;
+	-webkit-text-size-adjust: 100%;
+}
+
+body, html{
+	/*font-family: Helvetica Neue,Helvetica,Arial,sans-serif;*/
+	font-family: 'Raleway', sans-serif;
+	color: #fff;
+
+	padding: 0;
+	margin: 0;
+
+	background-color: #05141e;
+	
+	font-variant-ligatures: none;
+	-webkit-font-variant-ligatures: none;
+	-moz-osx-font-variant-ligatures: none;
+/*	-webkit-font-smoothing:antialiased;
+	-moz-osx-font-smoothing:grayscale;*/
+}
+
+h2{
+	font-size: 20px;
+	font-weight: normal;
+}
+
+h2 b{
+	font-weight: bold;
+}
+
+p{
+	margin-bottom: 7px;
+}
+
+/*
+	
+	== STAFF MEMEBER =======================================
+
+*/
+
+.site-content{
+	padding: 40px 320px 40px 0px;
+}
+
+.staff-members{
+	position: relative;
+}
+
+.staff-member{
+	position: relative;
+	display: inline-block;
+	margin-left: 30px;
+	margin-bottom: 70px;
+}
+
+.staff-member .photo{
+	position: absolute;
+	width: 100%;
+	height: 100%;
+	overflow: hidden;
+
+}
+
+.staff-member .photo .background,
+.staff-member .photo .portrait{
+	position: absolute;
+	width: 100%;
+	height: 100%;
+	background-size: cover;
+	background-repeat: no-repeat;
+
+	/*-webkit-filter: grayscale(100%);
+    filter: grayscale(100%);*/
+}
+
+.staff-member .photo .background{
+	background-image: url(/wp-content/themes/mario/assets/images/wall.jpg);
+}
+
+.staff-member .photo .portrait{
+
+}
+
+.portrait .segment{
+	position: absolute;
+	top: 0; 
+	left: 0;
+}
+
+.staff-member .wedge{
+	position: absolute;
+	background: url(/wp-content/themes/mario/assets/images/wedge-pink.svg);
+	background-size: contain;
+	background-repeat: no-repeat;
+	width: 25%;
+	height: 25%;
+	content: " ";
+	opacity: 1;
+/*
+	-webkit-transition: all 0.25s ease-in-out 0s;
+          	transition: all 0.25s ease-in-out 0s;
+*/
+}
+
+.staff-member .bio{
+	position: absolute;
+	top: 100%;
+	left: 0px;
+	width: 100%;
+	padding: 2px 5px 3px 0px;
+}
+
+.staff-member .bio h2{
+	/*color: #ee1e5a;*/
+	color: #2de0e0;
+	font-size: 16px;
+	line-height: 16px;
+	margin-top: 5px;
+	margin-bottom: 2px;
+	text-transform: uppercase;
+
+	text-shadow: 0px 1px 8px rgba(0,0,0,0.5);
+}
+
+.staff-member .bio h2 .nickname{
+	font-size: inherit;
+	font-size: inherit;
+	line-height: inherit;
+	color: #ee1e5a;
+	font-style: italic;
+}
+
+.staff-member .bio h3{
+	/*color: #2de0e0;*/
+	color: #fff;
+	font-size: 11px;
+	text-transform: uppercase;
+	/*font-weight: bold;*/
+
+	text-shadow: 0px 1px 8px rgba(0,0,0,0.5);
+}
+
+
+
+.staff-member .help{
+	position: absolute;
+	padding: 30px 20px;
+	
+	box-sizing: border-box;
+	display: none;
+}
+
+.staff-member .help h3{
+	color: #ee1e5a;
+	/*color: #2de0e0;*/
+	font-size: 18px;
+	line-height: 18px;
+	margin-bottom: 6px;
+	/*text-transform: uppercase;*/
+	font-weight: 400;
+	/*text-shadow: 0px 1px 8px rgba(0,0,0,0.5);*/
+}
+
+.staff-member .help h2{
+	/*color: #ee1e5a;*/
+	color: #fff;
+	font-size: 26px;
+	line-height: 28px;
+	margin-bottom: 3px;
+	font-weight: 300;
+	/*text-transform: uppercase;*/
+	/*font-weight: 700;*/
+	/*font-family: 'Domine', serif;*/
+	/*text-shadow: 0px 1px 8px rgba(0,0,0,0.5);*/
+}
+
+.staff-member .hitarea{
+	position: absolute;
+	width: 100%;
+	height: 100%;
+}
+
+
+/* NAV HOLDER ----------------- */
+.nav-holder{
+	position: fixed;
+	width: 300px;
+	height: 100%;
+	right: 0px;
+	top: 0px;
+	padding: 150px 30px 0 20px;
+	background: black;
+	z-index: 20;
+}
+
+.nav-holder h2{
+	position: relative;
+	font-weight: 400;
+	font-size: 24px;
+
+	margin: 50px 0 20px 0;
+	padding-bottom: 10px;
+	/*border-bottom: 1px solid rgba(54,223,222,0.5);*/
+	/*border-bottom: 1px solid rgba(253,26,84,0.5);*/
+	border-bottom: 1px solid rgba(255,255,255,0.5);
+}
+
+.nav-holder h2:first-child{
+	margin-top: 0;
+}
+
+.nav-holder .logo{
+	position: absolute;
+	bottom: 20px;
+	right: 30px;
+	width: 30px;
+	height: 20px;
+	background-image: url(/wp-content/themes/mario/assets/images/with-w.svg);
+	background-repeat: no-repeat;
+	background-size: contain;
+	background-position: top left;
+}
+
+.nav{
+	position: relative;
+	width: 100%;
+}
+
+.nav.sort li.icon{
+	position: relative;
+	display: inline-block;
+	width: 50px;
+	height: 50px;
+	box-sizing: border-box;
+	margin-left: 40px;
+	
+	background-size: contain;
+	background-position: top left;
+	background-repeat: no-repeat;
+
+	-webkit-transition: fill 0.2s;
+    transition: fill 0.2s;
+}
+
+.nav.sort li.icon:first-child{
+	margin-left: 0;
+}
+
+.nav.sort li.alpha{ background-image: url(/wp-content/themes/mario/assets/images/icons_icon-alpha.svg) }
+.nav.sort li.happy{ background-image: url(/wp-content/themes/mario/assets/images/icons_icon-happy.svg) }
+.nav.sort li.time{ background-image: url(/wp-content/themes/mario/assets/images/icons_icon-time.svg) }
+
+.nav.sort li.alpha.selected, .nav.sort li.alpha:hover{ background-image: url(/wp-content/themes/mario/assets/images/icons_icon-alpha-selected.svg) }
+.nav.sort li.happy.selected, .nav.sort li.happy:hover{ background-image: url(/wp-content/themes/mario/assets/images/icons_icon-happy-selected.svg) }
+.nav.sort li.time.selected, .nav.sort li.time:hover{ background-image: url(/wp-content/themes/mario/assets/images/icons_icon-time-selected.svg) }
+
+
+.nav.filterList li{
+	position: relative;
+	display: inline-block;
+	font-weight: 300;
+	color: #ee1e5a;
+	font-size: 20px;
+	line-height: 28px;
+	margin-right: 10px;
+
+	-webkit-transition: all 0.15s;
+    transition: all 0.15s;
+}
+
+.nav.filterList li::after{
+	position: absolute;
+	top: 50%;
+	left: 0;
+	width: 100%;
+	height: 2px;
+	background: #ee1e5a;
+	content: " ";
+
+	-webkit-transition: all 0.15s;
+    transition: all 0.15s;
+}
+
+.nav.regions li{
+	color: #2de0e0;
+}
+
+.nav.regions li::after{
+	background: #2de0e0;
+}
+
+.nav.filterList li:hover::after{
+	width: 0%;
+}
+
+.nav.filterList li.selected{
+	color: #fff;
+	/*font-weight: 400;*/
+}
+
+.nav.filterList li.selected::after{
+	display: none;
+}
+
+
+.nav.sort li.button:hover{
+	/*background: #ee1e5a;*/
+}
+
+.nav.sort li.button:hover ul{
+	/*height: auto;*/
+}
+
+.nav.sort li.selected{
+	/*background: #ee1e5a;*/
+}
+
+
+
+/* SECTION ---*/
+.staff-members section{
+	position: relative;
+	margin: 10px 0 60px 0;
+	display: none;
+	overflow: hidden;
+}
+
+.staff-members section h1{
+	position: relative;
+	font-size: 24px;
+	margin: 0 30px 10px 30px;
+	padding-bottom: 10px;
+	border-bottom: 1px solid rgba(54,223,222,0.5);
+}
+
+
+/* HEADER --------------------- */
+header{
+	position: relative;
+	width: 100%;
+	height: 100px;
+	top: 0;
+	padding: 20px 50px;
+	/*background-color: #000;*/
+}
+
+header .logo{
+	position: absolute;
+	top: 30px;
+	left: 30px;
+	width: 60px;
+	height: 40px;
+	background-image: url(/wp-content/themes/mario/assets/images/with-w.svg);
+	background-repeat: no-repeat;
+	background-size: contain;
+	background-position: top left;
+}
+
+header h1{
+	position: absolute;
+	font-size: 36px;
+	left: 110px;
+	top: 32px;
+}
+
+header .hero{
+	padding: 100px 60px;
+}
+
+/* FOOTER --------------------- */
+
+footer{
+	position: fixed;
+	width: 100%;
+	height: 60px;
+	bottom: 0;
+	/*padding: 20px 50px;*/
+	background-color: #000;
+}
+
+footer .logo{
+	position: absolute;
+	top: 20px;
+	right: 30px;
+	width: 30px;
+	height: 20px;
+	background-image: url(/wp-content/themes/mario/assets/images/with-w.svg);
+	background-repeat: no-repeat;
+	background-size: contain;
+	background-position: top left;
+}
