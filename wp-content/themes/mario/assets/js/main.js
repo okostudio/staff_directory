@@ -4,6 +4,7 @@ let teams = {
   selectedTeams: ['AllStaff'],
   sortBy: 'alpha'
 };
+let doc = {};
 
 
 const init = function(){
@@ -39,6 +40,7 @@ const init = function(){
         if(a.smile_index > b.smile_index) return 1;
         return 0;
       });
+
     }
 
     // Get a list of all team types:
@@ -52,7 +54,7 @@ const init = function(){
 
       member.teams.map(team => {
         if(teams.types.join(',').indexOf("," + team) == -1) teams.types.push(team);
-      })
+      });
     })
 
     console.log(teams.types);
@@ -95,8 +97,9 @@ const init = function(){
       })
 
       teams[team].map(staff_member_data => {
-        new StaffMember(staff_member_data, section, 300, 300);        
+        new StaffMember(staff_member_data, section, 220, 220);        
       })
+      
     })
     // console.log(teams);
 
@@ -106,6 +109,8 @@ const init = function(){
     from('#AllStaff', 0.3, {alpha: 0, ease: Power3.easeIn})
 
     initNav();
+    addListeners();
+    onResize();
 
   });
 }
@@ -165,7 +170,33 @@ function showTeam(team){
 }
 
 
+function addListeners(){
+  console.log('>> Added listeners')
+  window.addEventListener("resize", onResize);
+}
 
+function onResize(e){
+  doc.width = window.innerWidth - 300;
+  doc.height = window.innerHeight;
+  doc.staff = {
+    width: 220,
+    height: 220,
+    marginLeft: 30,
+    marginBottom: 70
+  };
+
+  const sections = Array.from(document.querySelectorAll('section'));
+  const staffPerRow = Math.floor(doc.width / (doc.staff.height + doc.staff.marginLeft) );
+  sections.map((section) => {
+    const staffMembers = section.querySelectorAll('.staff-member');
+    const sectionHeight = Math.ceil( staffMembers.length / staffPerRow );
+    set(section, {
+      width: doc.width,
+      height: sectionHeight * (doc.staff.height + doc.staff.marginBottom)
+    })
+  });
+  console.log(doc)
+}
 
 
 //////////////////////////////////

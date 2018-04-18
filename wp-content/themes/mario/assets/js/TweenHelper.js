@@ -6,7 +6,11 @@
 var tweenLog = [];
 
 tween = function(_functionType, _element, _time, _object, _ease, _delay){
-	if($(_element).css) $(_element).css('display', 'block');
+	if($(_element).css){
+		if ($(_element).css('display') == 'none'){
+			$(_element).css('display', 'block');
+		}
+	} 
 	var easeType = "Power0.easeIn";
 	if(_ease) _ease = _ease.toLowerCase();
 	switch(_ease){
