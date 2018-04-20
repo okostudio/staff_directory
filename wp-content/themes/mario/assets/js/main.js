@@ -31,6 +31,7 @@ const init = function(){
         return 0;
       });
     }
+
     // Sort staff by smile index.
     if(teams.sortBy == 'smile'){
       staff.sort( (b,a) => {
@@ -42,6 +43,8 @@ const init = function(){
       });
 
     }
+
+    
 
     // Get a list of all team types:
     teams.types = ['AllStaff'];
@@ -58,6 +61,7 @@ const init = function(){
     })
 
     console.log(teams.types);
+
 
     // sort teams alphabeticaly
     teams.types.sort( (a,b) => {
@@ -162,7 +166,8 @@ function hideTeam(team){
 }
 
 function showTeam(team){
-  set('#'+team, {height: 'auto', marginTop: 10, marginBottom: 50});
+  const height = document.querySelector('#' + team).getAttribute('data-height');
+  set('#' + team, { height: height, marginTop: 10, marginBottom: 50});
   from('#'+team, 0.3, {height: 0, marginTop: 0, marginBottom: 0}, 'inOut');
 
   teams.selectedTeams.push(team);
@@ -182,7 +187,7 @@ function onResize(e){
     width: 220,
     height: 220,
     marginLeft: 30,
-    marginBottom: 70
+    marginBottom: 80
   };
 
   const sections = Array.from(document.querySelectorAll('section'));
@@ -194,6 +199,7 @@ function onResize(e){
       width: doc.width,
       height: sectionHeight * (doc.staff.height + doc.staff.marginBottom)
     })
+    section.setAttribute('data-height', sectionHeight * (doc.staff.height + doc.staff.marginBottom));
   });
   console.log(doc)
 }
