@@ -93,7 +93,7 @@ StaffMember.prototype.loadImage = function (src) {
     this.portrait.appendChild(temp);
     temp.onload = () => {
       this.staffMember.style.display = "inline-block";
-      TweenMax.from(this.staffMember, 0.3, { alpha: 0, ease: Power3.easeIn });
+      // TweenMax.from(this.staffMember, 0.3, { alpha: 0, ease: Power3.easeIn });
     }
   };
 }

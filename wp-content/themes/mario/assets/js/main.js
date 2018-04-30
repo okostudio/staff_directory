@@ -4,11 +4,15 @@ let teams = {
   selectedTeams: ['AllStaff'],
   sortBy: 'alpha'
 };
-let doc = {};
+let doc = {
+  onFirstLoad: true
+};
 
 
 const init = function(){
-    
+  
+  console.log('>> INIT')
+
   if(location.href.indexOf('smile') > -1){
     teams.sortBy = 'smile';
     document.querySelector('.nav .happy').classList.add('selected');
@@ -19,6 +23,8 @@ const init = function(){
 
   $.getJSON('/wp-json/wp/v2/posts/?per_page=100', function(data) {
   // console.log(data)
+
+    console.log('>> LOADED DATA')
 
     staff = data.map( staff_member => staff_member );
     StaffMemberContainer = document.querySelector('.staff-members');
@@ -41,10 +47,7 @@ const init = function(){
         if(a.smile_index > b.smile_index) return 1;
         return 0;
       });
-
     }
-
-    
 
     // Get a list of all team types:
     teams.types = ['AllStaff'];
@@ -93,7 +96,6 @@ const init = function(){
 
       // arrange into teams
       staff.map(member => {
-
         if(!member.teams.indexOf('AllStaff') -1) member.teams.unshift('AllStaff');
         if(!teams.AllStaff) teams.AllStaff = [];
         teams.AllStaff.push(member);
@@ -181,26 +183,54 @@ function addListeners(){
 }
 
 function onResize(e){
+  console.log(">> RESIZING")
   doc.width = window.innerWidth - 300;
   doc.height = window.innerHeight;
   doc.staff = {
     width: 220,
     height: 220,
     marginLeft: 30,
-    marginBottom: 80
+    marginBottom: 80,
+    offsetX: 250,
+    offsetY: 300
   };
 
   const sections = Array.from(document.querySelectorAll('section'));
-  const staffPerRow = Math.floor(doc.width / (doc.staff.height + doc.staff.marginLeft) );
+  const staffPerRow = Math.floor(doc.width / doc.staff.offsetX);
+
   sections.map((section) => {
-    const staffMembers = section.querySelectorAll('.staff-member');
-    const sectionHeight = Math.ceil( staffMembers.length / staffPerRow );
-    set(section, {
-      width: doc.width,
-      height: sectionHeight * (doc.staff.height + doc.staff.marginBottom)
+    const staffMembers = Array.from(section.querySelectorAll('.staff-member'));
+    let offset = {x: 0, y: 0}
+
+    staffMembers.map((member, i) => {
+      // cycle through each staff member.
+
+      if (doc.onFirstLoad){
+        // quickly position on first load
+        set(member, {x: offset.x, y: offset.y});
+      } else {
+        // animated positioning
+        TweenMax.to(member, 0.25, {x: offset.x, y: offset.y, ease: Power3.easeOut})
+      }
+      
+      offset.x += doc.staff.offsetX;
+
+      if (offset.x >= staffPerRow * doc.staff.offsetX) {
+        offset.x = 0;
+        offset.y += doc.staff.offsetY;
+      }
     })
-    section.setAttribute('data-height', sectionHeight * (doc.staff.height + doc.staff.marginBottom));
+
+    const sectionHeight = Math.ceil( staffMembers.length / staffPerRow );
+    const sectionSize = {
+      width: doc.width,
+      height: sectionHeight * doc.staff.offsetY
+    }
+    set(section, {width: sectionSize.width, height: sectionSize.height})
+    section.setAttribute('data-height', sectionSize.height);
   });
+
+  doc.onFirstLoad = false;
   console.log(doc)
 }
 
@@ -210,3 +240,18 @@ $(document).ready(init)
 
 
 
+function sortBySmiles(){
+
+  teams.types.map((team, i) => {
+    console.log(">> team")
+    console.log(teams[team])
+    teams[team] = teams[team].sort((b, a) => {
+      if (!a.smile_index) a.smile_index = 0;
+      if (!b.smile_index) b.smile_index = 0;
+      if (a.smile_index < b.smile_index) return -1;
+      if (a.smile_index > b.smile_index) return 1;
+      return 0;
+    });
+  })
+  onResize();
+}
