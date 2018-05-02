@@ -8,19 +8,19 @@
 	<!-- <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,700" rel="stylesheet"> -->
 	<link href="https://fonts.googleapis.com/css?family=Raleway:300,400,700" rel="stylesheet">
 	<link rel='stylesheet' href='/wp-content/themes/mario/style.css?ver=0.01' type='text/css' media='all' />
-	<link rel="icon" href="/wp-content/themes/mario/assets/iamges/favicon.ico" type="image/x-icon"/>
-	<link rel="shortcut icon" href="/wp-content/themes/mario/assets/iamges/favicon.ico" type="image/x-icon"/>
-	<link rel="icon" type="image/png" href="/wp-content/themes/mario/assets/iamges/favicon-32x32.png" sizes="32x32" />
-	<link rel="icon" type="image/png" href="/wp-content/themes/mario/assets/iamges/favicon-16x16.png" sizes="16x16" />
+	<link rel="icon" href="/wp-content/themes/mario/assets/images/favicon.ico" type="image/x-icon"/>
+	<link rel="shortcut icon" href="/wp-content/themes/mario/assets/images/favicon.ico" type="image/x-icon"/>
+	<link rel="icon" type="image/png" href="/wp-content/themes/mario/assets/images/favicon-32x32.png" sizes="32x32" />
+	<link rel="icon" type="image/png" href="/wp-content/themes/mario/assets/images/favicon-16x16.png" sizes="16x16" />
 	
 
- 	<script src="/wp-content/themes/mario/assets/js/Helpers.js"></script>
- 	<script src="/wp-content/themes/mario/assets/js/jquery-3.3.1.min.js"></script>
- 	<script src="/wp-content/themes/mario/assets/js/TweenMax.min.js"></script>
- 	<script src="/wp-content/themes/mario/assets/js/TweenHelper.js"></script>
- 	<script src="/wp-content/themes/mario/assets/js/StaffMember.js"></script>
- 	<script src="/wp-content/themes/mario/assets/js/navigate.js"></script>
- 	<script src="/wp-content/themes/mario/assets/js/main.js"></script>
+	<script src="/wp-content/themes/mario/assets/js/Helpers.js"></script>
+	<script src="/wp-content/themes/mario/assets/js/jquery-3.3.1.min.js"></script>
+	<script src="/wp-content/themes/mario/assets/js/TweenMax.min.js"></script>
+	<script src="/wp-content/themes/mario/assets/js/TweenHelper.js"></script>
+	<script src="/wp-content/themes/mario/assets/js/StaffMember.js"></script>
+	<script src="/wp-content/themes/mario/assets/js/navigate.js"></script>
+	<script src="/wp-content/themes/mario/assets/js/main.js"></script>
 	
 </head>
 

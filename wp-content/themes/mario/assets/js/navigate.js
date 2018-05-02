@@ -20,11 +20,17 @@ function setNewPage(state, title, url){
 function initNav(){
 
 	document.querySelector('.nav .happy').addEventListener('click', (e) => {
-		window.open(location.origin + "/smile-index/","_self");
+		sortTeams('smile', true);
+		teams.sortBy = 'smile';
+		$('.nav.sort .button').removeClass('selected')
+		$('.nav .happy').addClass('selected')
 	})
 
 	document.querySelector('.nav .alpha').addEventListener('click', (e) => {
-		window.open(location.origin + "/a-z/","_self");
+		sortTeams('alpha', true);
+		teams.sortBy = 'alpha';
+		$('.nav.sort .button').removeClass('selected')
+		$('.nav .alpha').addClass('selected')
 	})
 
 	// !!!!!!!!!!! IN DEVELOPMENT !!!!!!!!!!!!!!!!!!!!!

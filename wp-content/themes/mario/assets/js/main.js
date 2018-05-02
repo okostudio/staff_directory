@@ -1,4 +1,5 @@
 let staff = {};
+let staffMembers = {}
 let StaffMemberContainer;
 let teams = {
   selectedTeams: ['AllStaff'],
@@ -29,40 +30,24 @@ const init = function(){
     staff = data.map( staff_member => staff_member );
     StaffMemberContainer = document.querySelector('.staff-members');
 
-    // Sort staff alphabetically.
-    if(teams.sortBy == 'alpha'){
-      staff.sort( (a,b) => {
-        if(a.first_name < b.first_name) return -1;
-        if(a.first_name > b.first_name) return 1;
-        return 0;
-      });
-    }
-
-    // Sort staff by smile index.
-    if(teams.sortBy == 'smile'){
-      staff.sort( (b,a) => {
-        if(!a.smile_index) a.smile_index = 0;
-        if(!b.smile_index) b.smile_index = 0;
-        if(a.smile_index < b.smile_index) return -1;
-        if(a.smile_index > b.smile_index) return 1;
-        return 0;
-      });
-    }
+    staff = staff.sort((b, a) => {
+      if (a.first_name > b.first_name) return -1;
+      if (a.first_name < b.first_name) return 1;
+      return 0;
+    });
 
     // Get a list of all team types:
     teams.types = ['AllStaff'];
     staff.map((member, i) => {
 
-      console.log(`
-      ${member.first_name + ' ' + member.last_name}
-      ${member.teams}`)
+      // console.log(`
+      // ${member.first_name + ' ' + member.last_name}
+      // ${member.teams}`)
       
-
       member.teams.map(team => {
         if(teams.types.join(',').indexOf("," + team) == -1) teams.types.push(team);
       });
     })
-
     console.log(teams.types);
 
 
@@ -73,37 +58,45 @@ const init = function(){
       return 0;
     })
 
+    // add teams members to AllStaff.
+    if (!teams.AllStaff) teams.AllStaff = [];
+    staff.map(member => {
+      if (!member.teams.indexOf('AllStaff') - 1) member.teams.unshift('AllStaff');
+      teams.AllStaff.push(member);
+    });
+
     // arrange members into teams:
-    teams.types.map(team => {
-      teams[team] = [];
+    teams.types.map(teamName => {
+      if (teamName != 'AllStaff') teams[teamName] = [];
 
       // include link to team type into nav
       var teamNavItem = document.createElement('li');
-      teamNavItem.className = 'sub-button ' + team;
-      teamNavItem.setAttribute('data', team);
-      teamNavItem.innerHTML = splitCamelCaseText(team)
+      teamNavItem.className = 'sub-button ' + teamName;
+      teamNavItem.setAttribute('data', teamName);
+      teamNavItem.innerHTML = splitCamelCaseText(teamName)
       document.querySelector('#teams').appendChild(teamNavItem);
       teamNavItem.addEventListener('click', selectTeam)
 
       // include title for each section.
       var section = document.createElement('section');
-      section.id = team;
+      section.id = teamName;
       section.className = 'team';
       var title = document.createElement('h1');
-      title.innerHTML = splitCamelCaseText(team);
+      title.innerHTML = splitCamelCaseText(teamName);
       section.appendChild(title)
       StaffMemberContainer.appendChild(section);
 
       // arrange into teams
       staff.map(member => {
-        if(!member.teams.indexOf('AllStaff') -1) member.teams.unshift('AllStaff');
-        if(!teams.AllStaff) teams.AllStaff = [];
-        teams.AllStaff.push(member);
-        if(member.teams.join(',').indexOf("," + team) > -1) teams[team].push(member);
-      })
+        
+        if (member.teams.join(',').indexOf("," + teamName) > -1){
+          if(teamName != 'AllStaff') teams[teamName].push(member);
+        } 
+      });      
 
-      teams[team].map(staff_member_data => {
-        new StaffMember(staff_member_data, section, 220, 220);        
+      teams[teamName].map(staff_member_data => {
+        const staffmember = new StaffMember(staff_member_data, section, photo.width, photo.height);
+        staffMembers[staff_member_data.first_name + staff_member_data.last_name] = staffmember;
       })
       
     })
@@ -116,7 +109,9 @@ const init = function(){
 
     initNav();
     addListeners();
-    onResize();
+    
+    // Sort teams - also triggers resize;
+    sortTeams(teams.sortBy);
 
   });
 }
@@ -162,7 +157,13 @@ function selectTeam(e){
 }
 
 function hideTeam(team){
-  to('#'+team, 0.3, {height: 0, marginTop: 0, marginBottom: 0}, 'inOut');
+  to('#' + team, 0.3, {
+    height: 0,
+    marginTop: 0,
+    marginBottom: 0,
+    onComplete: hide,
+    onCompleteParams: ['#' + team]
+  }, 'inOut');
   teams.selectedTeams = removeStringFromArray(team, teams.selectedTeams);
   document.querySelector('.nav .' + team).classList.remove('selected');
 }
@@ -176,82 +177,112 @@ function showTeam(team){
   document.querySelector('.nav .' + team).classList.add('selected');
 }
 
+function onResize(e){
+  const navWidth = 300;
+  doc.width = window.innerWidth - navWidth;
+  doc.height = window.innerHeight;
+  photo.offsetX = photo.width + photo.marginLeft;
+  photo.offsetY = photo.height + photo.marginBottom;
 
-function addListeners(){
+  const sections = Array.from(document.querySelectorAll('section'));
+  const staffPerRow = Math.floor(doc.width / photo.offsetX);
+  
+  
+
+
+  teams.types.map((teamName, i) => {
+    const section = document.querySelector('#' + teamName);
+    // const staffMembers = Array.from(section.querySelectorAll('.staff-member'));
+    const team = teams[teamName];
+    const sectionHeight = Math.ceil(team.length / staffPerRow);
+    const sectionSize = {
+      width: doc.width,
+      height: sectionHeight * photo.offsetY
+    }
+    if (section.style.display != "none") {
+      set(section, { width: sectionSize.width, height: sectionSize.height })
+    }
+    section.setAttribute('data-height', sectionSize.height);
+
+
+    // cycle through each staff member.
+    let offset = { x: 0, y: 0 }
+    team.map((member, i) => {
+      const el = section.querySelector('.member' + member.id);
+
+      // define the x/y position of member, and include the x/y limits.
+      el.setAttribute('data-position', (offset.x / photo.offsetX) + ',' + (offset.y / photo.offsetY) + ',' + (staffPerRow - 1) + ',' + (sectionHeight - 1));
+
+      if (doc.onFirstLoad){
+        // quickly position on first load
+        set(el, {x: offset.x, y: offset.y});
+      } else {
+        // animated positioning
+        let ease = Power3.easeOut;
+        let time = 0.25;
+        if (e.isSlow) {
+          ease = Power3.easeInOut
+          time = 0.4;
+        }
+        TweenMax.to(el, time, { x: offset.x, y: offset.y, ease: ease})
+      }
+      
+      offset.x += photo.offsetX;
+
+      if (offset.x >= staffPerRow * photo.offsetX) {
+        offset.x = 0;
+        offset.y += photo.offsetY;
+      }
+
+    })
+
+    
+  });
+
+  to('section h1', 0.3, { width: staffPerRow * photo.offsetX - photo.marginLeft }, 'out')
+
+  doc.onFirstLoad = false;
+}
+
+
+
+function sortTeams(method, isSlow = false){
+  teams.types.map((team, i) => {
+    // console.log(">> team")
+    // console.log(teams[team])
+    switch(method){
+      case 'smile' : 
+        teams[team] = teams[team].sort((b, a) => {
+          if (!a.smile_index) a.smile_index = 0;
+          if (!b.smile_index) b.smile_index = 0;
+          if (a.smile_index < b.smile_index) return -1;
+          if (a.smile_index > b.smile_index) return 1;
+          return 0;
+        });
+        break;
+
+      case 'alpha' :
+        teams[team] = teams[team].sort((b, a) => {
+          if (a.first_name > b.first_name) return -1;
+          if (a.first_name < b.first_name) return 1;
+          return 0;
+        });
+        break;
+
+      default: break;
+    }
+    
+  })
+  
+  onResize({isSlow: isSlow});
+}
+
+
+function addListeners() {
   console.log('>> Added listeners')
   window.addEventListener("resize", onResize);
 }
 
-function onResize(e){
-  console.log(">> RESIZING")
-  doc.width = window.innerWidth - 300;
-  doc.height = window.innerHeight;
-  doc.staff = {
-    width: 220,
-    height: 220,
-    marginLeft: 30,
-    marginBottom: 80,
-    offsetX: 250,
-    offsetY: 300
-  };
-
-  const sections = Array.from(document.querySelectorAll('section'));
-  const staffPerRow = Math.floor(doc.width / doc.staff.offsetX);
-
-  sections.map((section) => {
-    const staffMembers = Array.from(section.querySelectorAll('.staff-member'));
-    let offset = {x: 0, y: 0}
-
-    staffMembers.map((member, i) => {
-      // cycle through each staff member.
-
-      if (doc.onFirstLoad){
-        // quickly position on first load
-        set(member, {x: offset.x, y: offset.y});
-      } else {
-        // animated positioning
-        TweenMax.to(member, 0.25, {x: offset.x, y: offset.y, ease: Power3.easeOut})
-      }
-      
-      offset.x += doc.staff.offsetX;
-
-      if (offset.x >= staffPerRow * doc.staff.offsetX) {
-        offset.x = 0;
-        offset.y += doc.staff.offsetY;
-      }
-    })
-
-    const sectionHeight = Math.ceil( staffMembers.length / staffPerRow );
-    const sectionSize = {
-      width: doc.width,
-      height: sectionHeight * doc.staff.offsetY
-    }
-    set(section, {width: sectionSize.width, height: sectionSize.height})
-    section.setAttribute('data-height', sectionSize.height);
-  });
-
-  doc.onFirstLoad = false;
-  console.log(doc)
-}
-
-
 //////////////////////////////////
 $(document).ready(init)
 
-
-
-function sortBySmiles(){
-
-  teams.types.map((team, i) => {
-    console.log(">> team")
-    console.log(teams[team])
-    teams[team] = teams[team].sort((b, a) => {
-      if (!a.smile_index) a.smile_index = 0;
-      if (!b.smile_index) b.smile_index = 0;
-      if (a.smile_index < b.smile_index) return -1;
-      if (a.smile_index > b.smile_index) return 1;
-      return 0;
-    });
-  })
-  onResize();
-}

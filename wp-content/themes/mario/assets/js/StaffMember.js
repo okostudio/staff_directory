@@ -1,3 +1,25 @@
+const photo = {
+  width: 220,
+  height: 220,
+  marginLeft: 20,
+  marginBottom: 80
+}
+
+const questionaire = {
+  questions: [
+    ["A genie appears to you and tells you that tomorrow, you can be doing any other job in the world; what you be doing?", "Wildlife TV presenter"],
+    ["Few people know this about me, but…", "I was an awfully behaved child who was terrible at maths and academia in general"],
+    ["In my spare time, I like to…", "Go fishing on my kayak, play the drums, play rugby"],
+    ["My party trick is…", "To bore the heal out of everyone by talking about animals"],
+    ["A book I’ll always recommend is…", "Phillip Pullman’s Dark Materials or any of Pratchett’s discworld series."],
+    ["If I were a fictional character, I’d be…", "Arthur Dent"],
+    ["A person I admire is…", "David Attenborough"],
+    ["I have an irrational fear of…", "Small clusters / irregular patters of holes or bumps - trypophobia"],
+    ["My biggest pet peeve is…", "Consistent lack of punctuality"],
+    ["The thing I love most about coming to work is…", "People here laugh at my jokes"]
+  ],
+  meme: ''
+};
 
 const divisions = 5;  //number of image segments
 const pink = '#ee1e5a';
@@ -23,13 +45,13 @@ function StaffMember(staffMemberData, container, width = 220, height = 220) {
   }
 
   newDiv('staffMember', 'staff-member');
-  newDiv('extra', 'extra', 'staffMember');
   newDiv('photo', 'photo', 'staffMember');
   newDiv('help', 'help', 'staffMember');
   newDiv('bio', 'bio', 'staffMember');
   newDiv('background', 'background', 'photo');
   newDiv('portrait', 'portrait', 'photo');
   newDiv('wedge', 'wedge', 'photo');
+  newDiv('extra', 'extra', 'staffMember');
   newDiv('hitarea', 'hitarea', 'staffMember');
   
 
@@ -37,6 +59,7 @@ function StaffMember(staffMemberData, container, width = 220, height = 220) {
   this.staffMember.style.height = height + "px";
   this.staffMember.style.display = "none";
   this.staffMember.classList.add('member' + staffMemberData.id);
+  this.staffMember.id = staffMemberData.first_name + staffMemberData.last_name;
   this.class = 'member' + staffMemberData.id;
   container.appendChild(this.staffMember);
 
@@ -58,13 +81,58 @@ function StaffMember(staffMemberData, container, width = 220, height = 220) {
   this.setText()
 }
 
+StaffMember.prototype.populateExtras = function () {
+
+  this.extra.innerHTML = `
+    <div class="column column1"></div>
+    <div class="column column2"></div>
+  `
+
+  const col1 = this.extra.querySelector('.column1');
+  const col2 = this.extra.querySelector('.column2');
+  let target = col1;
+
+  
+  for (i = 0; i < 10; i++) {
+    if (this.data['question' + (i + 1)]){
+
+      // if any questions have been anstered, enable show extras.
+      this.hasExtras = true;
+
+      const htmlMem = target.innerHTML;
+      const html = `
+        <div class="question">${questionaire.questions[i][0]}</div>
+        <div class="answer">${this.data['question' + (i + 1)]}</div>
+      `
+      target.innerHTML += html;
+      if (col1.offsetHeight > 300){
+        target.innerHTML = htmlMem;
+        target = col2;
+        target.innerHTML += html;
+      }
+    };
+
+    if (!this.hasExtras){
+      col1.innerHTML = `
+        <div class="question">Why haven't I filled out my 'Getting to know you' survey?</div>
+        <div class="answer">Dunno, guess I'll get onto that ASAP.</div>
+      `
+    }
+  }
+
+  this.extra.style.opacity = 1;  
+  this.extra.style.overflow = 'hidden';
+}
+
+
+
 
 
 StaffMember.prototype.setText = function () {
   // Name / Nickname / Surname and Job title
   // check for nickname;
   let nickname = "";
-  if (this.data.nickname) nickname = `<span class="nickname">&ldquo;${this.data.nickname}&rdquo;</span>`;
+  if (this.data.nickname) nickname = `<span class="nickname">&ldquo;${this.data.nickname}&rdquo; </span>`;
   this.bio.innerHTML = `
     <h2>${this.data.first_name} ${nickname} ${this.data.last_name}</h2>
     <h3>${this.data.job_title}</h3>`;
@@ -93,6 +161,7 @@ StaffMember.prototype.loadImage = function (src) {
     this.portrait.appendChild(temp);
     temp.onload = () => {
       this.staffMember.style.display = "inline-block";
+      this.populateExtras();
       // TweenMax.from(this.staffMember, 0.3, { alpha: 0, ease: Power3.easeIn });
     }
   };
@@ -252,53 +321,118 @@ StaffMember.prototype.drawElipsesFromTransparentPixelData = function () {
 
 StaffMember.prototype.addListeners = function () {
   const THIS = this;
-  this.staffMember.addEventListener('mouseover', function (e) {
-    if(e.target.className.indexOf('hitarea') > -1){
-      if (!THIS.isSplit) {
-        THIS.isSplit = true;
-        THIS.scanForTransparentPixels();
-      }
-
-      const segments = this.querySelectorAll('.segment');
-      Array.from(segments).map((segment, i) => {
-        kill(segment);
-        to(segment, 0.4, { y: 200 }, 'inOut', i * 0.06);
-      })
-      const wedge = this.querySelector('.wedge');
-      to(wedge, 0.4, { rotation: 45, transformOrigin: "100% 0%" }, 'inOut');
-
-      const help = this.querySelector('.help');
-      kill(help);
-      set(help, { y: -20, alpha: 0 });
-      to(help, 0.4, { y: 0, alpha: 1 }, 'out', 0.2);
-    }
-  })
-
-  this.staffMember.addEventListener('mouseout', function (e) {
-    
-    const segments = this.querySelectorAll('.segment');
-    if(e.target.className.indexOf('hitarea') > -1){
-      Array.from(segments).map((segment, i) => {
-        kill(segment);
-        to(segment, 0.4, { y: 0 }, 'out', ((divisions + 1) * 0.01) - i * 0.01);
-      })
-      const wedge = this.querySelector('.wedge');
-      to(wedge, 0.4, { rotation: 0, transformOrigin: "100% 0%" }, 'inOut');
-
-      const help = this.querySelector('.help');
-      kill(help);
-      to(help, 0.2, { y: -20, alpha: 0 }, 'out');
-      to(this, 0.3, { width: 220}, 'out');
-
-      to(this.querySelector('.extra'), 0.3, { width: "100%" }, 'out')
-
-    }
-  })
-
-  this.staffMember.addEventListener('click', function (e) {
-    to(this.querySelector('.extra'), 0.3, {width: "100%"}, 'out')
-  })
+  this.staffMember.addEventListener('mouseover', function(e){ staffOver(e, THIS) })
+  this.staffMember.addEventListener('mouseout', function(e){ staffOut(e, THIS) })
+  this.staffMember.addEventListener('click', function(e){ toggleExtras(e, THIS) })
 };
+
+function staffOver(e, THIS) {
+  if (e.target.className.indexOf('hitarea') > -1) {
+    if (!THIS.isSplit) {
+      THIS.isSplit = true;
+      THIS.scanForTransparentPixels();
+    }
+
+    const segments = THIS.staffMember.querySelectorAll('.segment');
+    Array.from(segments).map((segment, i) => {
+      kill(segment);
+      to(segment, 0.4, { y: 200 }, 'inOut', i * 0.06);
+    })
+    const wedge = THIS.staffMember.querySelector('.wedge');
+    to(wedge, 0.4, { rotation: 45, transformOrigin: "100% 0%" }, 'inOut');
+
+    const help = THIS.staffMember.querySelector('.help');
+    kill(help);
+    set(help, { y: -20, alpha: 0 });
+    to(help, 0.4, { y: 0, alpha: 1 }, 'out', 0.2);
+
+    // set to highest z-index
+    THIS.staffMember.style.zIndex = 1000;
+  }
+}
+
+function staffOut(e, THIS) {
+  if (e.target.className.indexOf('hitarea') > -1) {
+    showStaffMemberPhoto(THIS);
+    hideExtras(THIS);
+
+    const hitarea = THIS.staffMember.querySelector('.hitarea');
+    to(hitarea, 0.3, { width: photo.width, height: photo.height, x: 0, y: 0 }, 'out')
+    // set to normal z-index
+    THIS.staffMember.style.zIndex = 1;
+  }
+}
+
+function showStaffMemberPhoto(THIS){
+  const segments = THIS.staffMember.querySelectorAll('.segment');
+  Array.from(segments).map((segment, i) => {
+    kill(segment);
+    to(segment, 0.4, { y: 0 }, 'out', ((divisions + 1) * 0.01) - i * 0.01);
+  })
+
+  const wedge = THIS.staffMember.querySelector('.wedge');
+  to(wedge, 0.3, { rotation: 0, transformOrigin: "100% 0%" }, 'out');
+
+  const help = THIS.staffMember.querySelector('.help');
+  kill(help);
+  to(help, 0.2, { y: -20, alpha: 0 }, 'out');
+
+}
+
+function toggleExtras(e, THIS){
+  if( !THIS.extrasShowing ){
+    showExtras(THIS);
+  } else {
+    hideExtras(THIS);
+  }  
+}
+
+function showExtras(THIS) {
+  THIS.extrasShowing = true;
+  const pos = THIS.staffMember.getAttribute('data-position').split(',').map(n => parseInt(n));
+  const position = { x: pos[0], y: pos[1], X: pos[2], Y: pos[3]}
+  const extra = THIS.staffMember.querySelector('.extra');
+  const hitarea = THIS.staffMember.querySelector('.hitarea');
+
+  extra.classList.remove('bottomRight')
+  extra.classList.remove('topRight')
+  extra.classList.remove('topLeft')
+
+  // standard: from bottom left
+  if (position.x < position.X && position.y <= position.Y){
+    to(extra, 0.3, { width: photo.width + photo.offsetX, height: photo.offsetY, y: -photo.offsetY }, 'out');
+    to(hitarea, 0.3, { width: photo.width + photo.offsetX, height: photo.offsetY + photo.height, x: 0, y: -photo.offsetY }, 'out')
+  }
+  // bottom right
+  if (position.x == position.X && position.y < position.Y) {
+    extra.classList.add('bottomRight')
+    to(extra, 0.3, { width: photo.width + photo.offsetX, height: photo.offsetY, x: -photo.offsetX, y: -photo.offsetY }, 'out');
+    to(hitarea, 0.3, { width: photo.width + photo.offsetX, height: photo.offsetY + photo.height, x: -photo.offsetX, y: -photo.offsetY }, 'out')
+  }
+  // Top left
+  if (position.x < position.X && position.y == 0) {
+    extra.classList.add('topLeft')
+    to(extra, 0.3, { width: photo.width + photo.offsetX, height: photo.offsetY, x: 0, y: 0 }, 'out');
+    to(hitarea, 0.3, { width: photo.width + photo.offsetX, height: photo.offsetY, x: 0, y: 0 }, 'out')
+  }
+  // Top Right
+  if (position.x == position.X && position.y == 0) {
+    extra.classList.add('topRight')
+    to(extra, 0.3, { width: photo.width + photo.offsetX, height: photo.offsetY, x: -photo.offsetX, y: 0 }, 'out');
+    to(hitarea, 0.3, { width: photo.width + photo.offsetX, height: photo.offsetY, x: -photo.offsetX, y: 0 }, 'out')
+  }
+
+  
+  showStaffMemberPhoto(THIS);
+}
+
+function hideExtras(THIS) {
+  THIS.extrasShowing = false;
+  const extra = THIS.staffMember.querySelector('.extra');
+  to(extra, 0.3, { width: photo.width, height: 0, x: 0, y: 0 }, 'out')
+  const hitarea = THIS.staffMember.querySelector('.hitarea');
+  to(hitarea, 0.3, { width: photo.width, height: photo.height, x: 0, y: 0 }, 'out')
+}
 
 StaffMember.prototype.toGreyScale = function (image) {
   // convery image data to greyscale;

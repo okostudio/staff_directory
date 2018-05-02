@@ -174,11 +174,65 @@ p{
 
 .staff-member .extra{
 	position: absolute;
-	height: 100%;
-	width: 100%;
-	background: #ee1e5a;
+	height: 0;
+	width: 220px;
+	opacity: 0;
+	/* overflow: hidden; */
+
+	/* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#ee1e5a+0,2de0e0+100 */
+	background: rgb(238, 30, 90);
+	background: -moz-linear-gradient(45deg, rgba(238, 30, 90, 1) 0%, rgba(45, 224, 224, 1) 100%);
+	background: -webkit-linear-gradient(45deg, rgba(238, 30, 90, 1) 0%, rgba(45, 224, 224, 1) 100%);
+	background: linear-gradient(45deg, rgba(238, 30, 90, 1) 0%, rgba(45, 224, 224, 1) 100%);
+	border-radius: 0 0 20px 0;
 }
 
+.staff-member .extra.bottomRight{
+	background: -moz-linear-gradient(-45deg, rgba(45, 224, 224, 1) 0%, rgba(238, 30, 90, 1) 75%);
+	background: -webkit-linear-gradient(-45deg, rgba(45, 224, 224, 1) 0%, rgba(238, 30, 90, 1) 75%);
+	background: linear-gradient(135deg, rgba(45, 224, 224, 1) 0%, rgba(238, 30, 90, 1) 75%);
+	border-radius: 0 0 0 20px;
+}
+.staff-member .extra.topLeft {
+	background: -moz-linear-gradient(-45deg, rgba(238,30,90,1) 0%, rgba(45,224,224,1) 100%); 
+	background: -webkit-linear-gradient(-45deg, rgba(238,30,90,1) 0%,rgba(45,224,224,1) 100%);
+	background: linear-gradient(135deg, rgba(238,30,90,1) 0%,rgba(45,224,224,1) 100%);
+	border-radius: 0 0 20px 20px;
+}
+.staff-member .extra.topRight {
+	background: -moz-linear-gradient(45deg, rgba(45, 224, 224, 1) 0%, rgba(238, 30, 90, 1)  75%);
+	background: -webkit-linear-gradient(45deg, rgba(45, 224, 224, 1) 0%, rgba(238, 30, 90, 1)  75%);
+	background: linear-gradient(45deg, rgba(45, 224, 224, 1) 0%, rgba(238, 30, 90, 1)  75%);
+	border-radius: 0 0 20px 20px;
+}
+
+.staff-member .extra .column{
+	position: absolute;
+	top: 10px;
+	left: 10px;
+	width: 210px;
+	box-sizing: border-box;
+	padding: 20px 0;
+}
+
+.staff-member .extra .column:last-child{
+	left: 240px;
+}
+
+.staff-member .extra .question {
+	color: #322387;
+	font-size: 11px;
+	line-height: 1;
+	margin-bottom: 2px;
+	/* font-weight: bold; */
+}
+
+.staff-member .extra .answer {
+	color: #fff;
+	font-size: 12px;
+	line-height: 1;
+	margin-bottom: 8px;
+}
 
 
 .staff-member .help{
@@ -217,6 +271,8 @@ p{
 	position: absolute;
 	width: 100%;
 	height: 100%;
+
+	/* background-color: rgba(0,255,0,0.25); */
 }
 
 
