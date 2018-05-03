@@ -105,7 +105,8 @@ StaffMember.prototype.populateExtras = function () {
         <div class="answer">${this.data['question' + (i + 1)]}</div>
       `
       target.innerHTML += html;
-      if (col1.offsetHeight > 300){
+      // if text is over the height limit, srevert, and skip to next line.
+      if (col1.offsetHeight > 360){
         target.innerHTML = htmlMem;
         target = col2;
         target.innerHTML += html;
@@ -118,6 +119,18 @@ StaffMember.prototype.populateExtras = function () {
         <div class="answer">Dunno, guess I'll get onto that ASAP.</div>
       `
     }
+  }
+
+  // MEME image
+  if(this.data.meme){
+    const memeHeight = 340 - col2.offsetHeight;
+    col2.innerHTML += `
+      <div class="question underline">The MEME I most relate to is…</div>
+      <div class="meme"></div>
+    `;
+    const meme = this.extra.querySelector('.meme');
+    meme.style.backgroundImage = 'url(' + this.data.meme + ')';
+    meme.style.height = memeHeight + 'px';    
   }
 
   this.extra.style.opacity = 1;  
@@ -336,7 +349,7 @@ function staffOver(e, THIS) {
     const segments = THIS.staffMember.querySelectorAll('.segment');
     Array.from(segments).map((segment, i) => {
       kill(segment);
-      to(segment, 0.4, { y: 200 }, 'inOut', i * 0.06);
+      to(segment, 0.4, { y: 140 }, 'inOut', i * 0.06);
     })
     const wedge = THIS.staffMember.querySelector('.wedge');
     to(wedge, 0.4, { rotation: 45, transformOrigin: "100% 0%" }, 'inOut');
@@ -397,29 +410,37 @@ function showExtras(THIS) {
   extra.classList.remove('bottomRight')
   extra.classList.remove('topRight')
   extra.classList.remove('topLeft')
+  extra.classList.remove('centerRadial')
+  const marginBottom = 80;
+  const width = photo.width + (photo.offsetX * 2);
+  const height = photo.offsetY + marginBottom;
+  let offsetX = 0;
+  if (position.x == position.X - 1 && position.y > 0) extra.classList.add('centerRadial');
+  if (position.x == position.X - 1) offsetX = -photo.offsetX;  
+  if (position.x == position.X) offsetX = -2 * photo.offsetX;
 
   // standard: from bottom left
   if (position.x < position.X && position.y <= position.Y){
-    to(extra, 0.3, { width: photo.width + photo.offsetX, height: photo.offsetY, y: -photo.offsetY }, 'out');
-    to(hitarea, 0.3, { width: photo.width + photo.offsetX, height: photo.offsetY + photo.height, x: 0, y: -photo.offsetY }, 'out')
+    to(extra, 0.3, { width: width, height: height, x: offsetX, y: -photo.offsetY - marginBottom }, 'out');
+    to(hitarea, 0.3, { width: width, height: height + photo.height, x: offsetX, y: -photo.offsetY - marginBottom }, 'out')
   }
   // bottom right
   if (position.x == position.X && position.y < position.Y) {
     extra.classList.add('bottomRight')
-    to(extra, 0.3, { width: photo.width + photo.offsetX, height: photo.offsetY, x: -photo.offsetX, y: -photo.offsetY }, 'out');
-    to(hitarea, 0.3, { width: photo.width + photo.offsetX, height: photo.offsetY + photo.height, x: -photo.offsetX, y: -photo.offsetY }, 'out')
+    to(extra, 0.3, { width: width, height: height, x: offsetX, y: -photo.offsetY - marginBottom }, 'out');
+    to(hitarea, 0.3, { width: width, height: height + photo.height, x: offsetX, y: -photo.offsetY - marginBottom }, 'out')
   }
   // Top left
   if (position.x < position.X && position.y == 0) {
     extra.classList.add('topLeft')
-    to(extra, 0.3, { width: photo.width + photo.offsetX, height: photo.offsetY, x: 0, y: 0 }, 'out');
-    to(hitarea, 0.3, { width: photo.width + photo.offsetX, height: photo.offsetY, x: 0, y: 0 }, 'out')
+    to(extra, 0.3, { width: width, height: height, x: offsetX, y: - marginBottom }, 'out');
+    to(hitarea, 0.3, { width: width, height: height, x: offsetX, y: - marginBottom }, 'out')
   }
   // Top Right
   if (position.x == position.X && position.y == 0) {
     extra.classList.add('topRight')
-    to(extra, 0.3, { width: photo.width + photo.offsetX, height: photo.offsetY, x: -photo.offsetX, y: 0 }, 'out');
-    to(hitarea, 0.3, { width: photo.width + photo.offsetX, height: photo.offsetY, x: -photo.offsetX, y: 0 }, 'out')
+    to(extra, 0.3, { width: width, height: height, x: offsetX, y: - marginBottom }, 'out');
+    to(hitarea, 0.3, { width: width, height: height, x: offsetX, y: - marginBottom }, 'out')
   }
 
   

@@ -169,9 +169,11 @@ function hideTeam(team){
 }
 
 function showTeam(team){
-  const height = document.querySelector('#' + team).getAttribute('data-height');
-  set('#' + team, { height: height, marginTop: 10, marginBottom: 50});
-  from('#'+team, 0.3, {height: 0, marginTop: 0, marginBottom: 0}, 'inOut');
+  const marginBottom = 60;
+  const height = parseInt(document.querySelector('#' + team).getAttribute('data-height')) + marginBottom;
+  console.log(height)
+  set('#' + team, { height: height});
+  from('#'+team, 0.3, {height: 0}, 'inOut');
 
   teams.selectedTeams.push(team);
   document.querySelector('.nav .' + team).classList.add('selected');
