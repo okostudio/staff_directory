@@ -2,7 +2,7 @@ const photo = {
   width: 220,
   height: 220,
   marginLeft: 20,
-  marginBottom: 80
+  marginBottom: 95
 }
 
 const questionaire = {

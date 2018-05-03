@@ -313,7 +313,7 @@ p{
 	right: 0px;
 	top: 0px;
 	padding: 150px 30px 0 20px;
-	background: black;
+	background: rgba(0,0,0,0.5);
 	z-index: 20;
 }
 
@@ -447,6 +447,7 @@ p{
 	margin: 0;
 	display: none;
 	overflow: hidden;
+	min-width: 700px;
 }
 
 .staff-members section h1{

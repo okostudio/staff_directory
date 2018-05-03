@@ -7,7 +7,8 @@
 	<title>Staff Directory</title>
 	<!-- <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,700" rel="stylesheet"> -->
 	<link href="https://fonts.googleapis.com/css?family=Raleway:300,400,700" rel="stylesheet">
-	<link rel='stylesheet' href='/wp-content/themes/mario/style.css?ver=0.01' type='text/css' media='all' />
+	<link rel='stylesheet' href='/wp-content/themes/mario/style.css?ver=0.21' type='text/css' media='all' />
+	<link rel='stylesheet' href='/wp-content/themes/mario/assets/css/particles.css?ver=1.00' type='text/css' media='all' />
 	<link rel="icon" href="/wp-content/themes/mario/assets/images/favicon.ico" type="image/x-icon"/>
 	<link rel="shortcut icon" href="/wp-content/themes/mario/assets/images/favicon.ico" type="image/x-icon"/>
 	<link rel="icon" type="image/png" href="/wp-content/themes/mario/assets/images/favicon-32x32.png" sizes="32x32" />
@@ -19,12 +20,14 @@
 	<script src="/wp-content/themes/mario/assets/js/TweenMax.min.js"></script>
 	<script src="/wp-content/themes/mario/assets/js/TweenHelper.js"></script>
 	<script src="/wp-content/themes/mario/assets/js/StaffMember.js"></script>
+	<script src="/wp-content/themes/mario/assets/js/particles.js"></script>
 	<script src="/wp-content/themes/mario/assets/js/navigate.js"></script>
 	<script src="/wp-content/themes/mario/assets/js/main.js"></script>
 	
 </head>
 
 <body>
+<canvas id="particles"></canvas>
 <div id="page" class="site">
 
 	<header id="masthead" class="site-header" role="banner">

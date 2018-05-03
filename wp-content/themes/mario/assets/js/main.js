@@ -182,6 +182,8 @@ function showTeam(team){
 function onResize(e){
   const navWidth = 300;
   doc.width = window.innerWidth - navWidth;
+  if(doc.width < 710) doc.width = 710;
+
   doc.height = window.innerHeight;
   photo.offsetX = photo.width + photo.marginLeft;
   photo.offsetY = photo.height + photo.marginBottom;
@@ -197,6 +199,7 @@ function onResize(e){
     // const staffMembers = Array.from(section.querySelectorAll('.staff-member'));
     const team = teams[teamName];
     const sectionHeight = Math.ceil(team.length / staffPerRow);
+    
     const sectionSize = {
       width: doc.width,
       height: sectionHeight * photo.offsetY
