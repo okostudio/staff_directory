@@ -106,11 +106,13 @@ StaffMember.prototype.populateExtras = function () {
       `
       target.innerHTML += html;
       // if text is over the height limit, srevert, and skip to next line.
-      if (col1.offsetHeight > 360){
+      if (col1.offsetHeight > 350){
         target.innerHTML = htmlMem;
         target = col2;
         target.innerHTML += html;
       }
+      console.log({ name: this.data.first_name, offset: target.offsetHeight })
+
     };
 
     if (!this.hasExtras){
@@ -174,7 +176,6 @@ StaffMember.prototype.loadImage = function (src) {
     this.portrait.appendChild(temp);
     temp.onload = () => {
       this.staffMember.style.display = "inline-block";
-      this.populateExtras();
       // TweenMax.from(this.staffMember, 0.3, { alpha: 0, ease: Power3.easeIn });
     }
   };
@@ -394,6 +395,11 @@ function showStaffMemberPhoto(THIS){
 
 function toggleExtras(e, THIS){
   if( !THIS.extrasShowing ){
+    if(!THIS.extrasPopulated){
+      THIS.extrasPopulated = true;
+      THIS.populateExtras();
+    }
+
     showExtras(THIS);
   } else {
     hideExtras(THIS);
